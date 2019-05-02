@@ -21,6 +21,15 @@ public class Pawn extends Piece {
 	public String getImagePath() {
 		return imagePath;
 	}
+	
+	public boolean pawnSpecialCondition(ArrayList<Piece> pieces, Point location) {
+		for(Piece piece : pieces) {
+			if(piece.getLocation().x == location.x && piece.getLocation().y == location.y) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	@Override
 	public ArrayList<Point> getPossibleMoves(ArrayList<Piece> pieces) {
@@ -32,12 +41,14 @@ public class Pawn extends Piece {
 		
 		if(pieceColor == PieceColor.BLACK) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y + 1);
-			getBoard().checkAndAddToPossibleMove(tempLocation, this);
+			if(pawnSpecialCondition(pieces, tempLocation))
+				getBoard().checkAndAddToPossibleMove(tempLocation, this);
 			
 			tempLocation = getLocation();
 			if(getLocation().y == 2) {
 				tempLocation = new Point(tempLocation.x, tempLocation.y + 2);
-				getBoard().checkAndAddToPossibleMove(tempLocation, this);
+				if(pawnSpecialCondition(pieces, tempLocation) && pawnSpecialCondition(pieces, new Point(tempLocation.x, tempLocation.y - 1)))
+					getBoard().checkAndAddToPossibleMove(tempLocation, this);
 			}
 			
 			
@@ -61,13 +72,15 @@ public class Pawn extends Piece {
 		
 		if(pieceColor == PieceColor.WHITE) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y - 1);
-			getBoard().checkAndAddToPossibleMove(tempLocation, this);
+			if(pawnSpecialCondition(pieces, tempLocation))
+				getBoard().checkAndAddToPossibleMove(tempLocation, this);
 
 			//reset the location
 			tempLocation = super.getLocation();
 			if(getLocation().y == 7) {
 				tempLocation = new Point(tempLocation.x, tempLocation.y - 2);
-				getBoard().checkAndAddToPossibleMove(tempLocation, this);
+				if(pawnSpecialCondition(pieces, tempLocation) && pawnSpecialCondition(pieces, new Point(tempLocation.x, tempLocation.y + 1)))
+					getBoard().checkAndAddToPossibleMove(tempLocation, this);
 			}
 			
 			for(Piece piece : getBoard().getPieces()) {
@@ -83,6 +96,67 @@ public class Pawn extends Piece {
 					getBoard().checkAndAddToPossibleMove(tempLocation, this);
 				}
 			}
+		}
+		
+		return possibleMoves;
+	}
+	
+	public ArrayList<Point> getPawnThreats(ArrayList<Piece> pieces) {
+		ArrayList<Point> possibleMoves = new ArrayList<Point>();
+		if(getColor() == PieceColor.BLACK) {
+			//x + 1 - y+1
+			Point tempLocation = getLocation();
+			tempLocation = new Point(tempLocation.x + 1, tempLocation.y + 1);
+			
+			boolean flag = true;
+			for(Piece piece : pieces) {
+				if(piece.getLocation().x == tempLocation.x && piece.getLocation().y == tempLocation.y && piece.getColor() == getColor())
+					flag = false;
+			}
+			
+			if(flag)
+				possibleMoves.add(tempLocation);
+			
+			//x - y - 1
+			tempLocation = getLocation();
+			tempLocation = new Point(tempLocation.x - 1, tempLocation.y + 1);
+			
+			flag = true;
+			for(Piece piece : pieces) {
+				if(piece.getLocation().x == tempLocation.x && piece.getLocation().y == tempLocation.y && piece.getColor() == getColor())
+					flag = false;
+			}
+			
+			if(flag)
+				possibleMoves.add(tempLocation);
+		}
+		
+		else if(getColor() == PieceColor.WHITE) {
+			//x + 1 , y - 1
+			Point tempLocation = getLocation();
+			tempLocation = new Point(tempLocation.x + 1, tempLocation.y - 1);
+			
+			boolean flag = true;
+			for(Piece piece : pieces) {
+				if(piece.getLocation().x == tempLocation.x && piece.getLocation().y == tempLocation.y && piece.getColor() == getColor())
+					flag = false;
+			}
+			
+			if(flag)
+				possibleMoves.add(tempLocation);
+			
+			//x - 1, y - 1
+			tempLocation = getLocation();
+			tempLocation = new Point(tempLocation.x - 1, tempLocation.y - 1);
+			
+			flag = true;
+			for(Piece piece : pieces) {
+				if(piece.getLocation().x == tempLocation.x && piece.getLocation().y == tempLocation.y && piece.getColor() == getColor())
+					flag = false;
+			}
+			
+			if(flag)
+				possibleMoves.add(tempLocation);
 		}
 		
 		return possibleMoves;

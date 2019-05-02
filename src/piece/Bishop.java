@@ -44,7 +44,6 @@ public class Bishop extends Piece {
 		while(tempLocation.x < 8 && tempLocation.y < 8 && flag) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y + 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
-			System.out.println(flag);
 		}
 		
 		//reset the current location
@@ -66,7 +65,6 @@ public class Bishop extends Piece {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y + 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
 		}
-		
 		return possibleMoves;
 	}
 }

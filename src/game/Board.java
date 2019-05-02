@@ -8,7 +8,7 @@ import piece.*;
 public class Board {
 	private ArrayList<Piece> pieces;
 	
-	private Piece blackKing, whiteKing; 
+	private Piece blackKing, whiteKing;
 	
 	public Board() {
 		createComponents();
@@ -123,37 +123,84 @@ public class Board {
 	public PieceColor checkMate() {
 		
 		if(checkMateCondition(blackKing))
-			return PieceColor.BLACK;
-		
-		else if(checkMateCondition(whiteKing))
 			return PieceColor.WHITE;
+		
+		if(checkMateCondition(whiteKing))
+			return PieceColor.BLACK;
 		
 		return null;
 	}
 	
+	//if there is any enemy piece that threats the king
 	public boolean checkMateCondition(Piece king) {
 		for(Piece piece : pieces) {
 			if(piece.getColor() != king.getColor()) {
-				if(piece.getPossibleMoves() != null) {
-					for(Point point : piece.getPossibleMoves()) {
-						if(point.x == king.getLocation().x && point.y == king.getLocation().y) {
-							if(king.getPossibleMoves() == null)
-								return true;
+				for(Point point : piece.getPossibleMoves(pieces)) {
+					if(point.x == king.getLocation().x && point.y == king.getLocation().y) {
+						System.out.println("Condition 1");
+						if(checkMateCondition2(king, piece) && checkMateCondition3(king, piece)) {
+							return true;
+
+						}
+					}
+				}
+
+			}
+		}
+		System.out.println("asd");
+		return false;
+	}
+	
+	//if there is any friendly piece that can beat the enemy piece which threats except king
+	public boolean checkMateCondition2(Piece king, Piece possibleCheckMatePiece) {
+		System.out.println("Condition 2");
+		for(Piece piece : pieces) {
+			if(piece.getColor() != possibleCheckMatePiece.getColor()) {
+				if(piece.getClass().getSimpleName().equals("Pawn")) {
+					Pawn pawn = (Pawn) piece;
+					pawn.getPawnThreats(pieces);
+					for(Point point : pawn.getPawnThreats(pieces)) {
+						if(point.x == possibleCheckMatePiece.getLocation().x && point.y == possibleCheckMatePiece.getLocation().y && !piece.equals(king)) {
+							return false;
+						}
+					}
+				}
+				else {
+					for(Point point : piece.getPossibleMoves(pieces)) {
+						if(point.x == possibleCheckMatePiece.getLocation().x && point.y == possibleCheckMatePiece.getLocation().y && !piece.equals(king)) {
+							return false;
 						}
 					}
 				}
 				
 			}
 		}
-		return false;
+		return true;
 	}
 	
-	public boolean checkMateCondition2(Piece king) {
-		for(Piece piece : pieces) {
-			if(piece.getColor() == king.getColor()) {
-				return true;
+	//if there is no friendly piece, check that can king beat the enemy piece which threats 
+	public boolean checkMateCondition3(Piece king, Piece possibleCheckMatePiece) {
+		Point previousKingLocation = king.getLocation();
+		for(Point point : king.getPossibleMoves(pieces)) {
+			for(Piece piece : pieces) {
+				if(piece.getColor() != king.getColor() && piece.getLocation().x == point.x && piece.getLocation().y == point.y) {
+					//keep the king's previous location
+					
+					//move the king the location in order to check any threats coming from this location
+					king.move(piece.getLocation());
+					
+					for(Piece piece2 : pieces) {
+						for(Point point2 : piece2.getPossibleMoves(pieces)) {
+							if(king.getLocation().x == point2.x && king.getLocation().y == point2.y) {
+								king.move(previousKingLocation);
+								return true; 
+							}
+						}
+					}
+				}
 			}
 		}
+		king.move(previousKingLocation);
 		return false;
 	}
 }

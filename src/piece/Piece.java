@@ -54,26 +54,4 @@ public abstract class Piece {
 		possibleMoves = new ArrayList<Point>();
 	}
 	
-	public boolean checkAndAddToPossibleMove(ArrayList<Point> possibleMoves, Point tempLocation, ArrayList<Piece> pieces, boolean flag) {
-		Piece blockerPiece;
-		for(Piece piece : pieces) {
-			if(piece.getLocation().x == tempLocation.x && piece.getLocation().y == tempLocation.y) {
-				blockerPiece = piece;
-				//if the blocker piece is enemy
-				if(blockerPiece.getColor() != this.getColor())
-					possibleMoves.add(tempLocation);
-				
-				//break the loop
-				flag = false;
-			}
-		}
-	
-		//if there is no blocker
-		if(flag) {
-			possibleMoves.add(tempLocation);
-			return true;
-		}
-		return false;
-	}
-	
 }
