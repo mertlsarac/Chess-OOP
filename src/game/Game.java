@@ -292,24 +292,39 @@ public class Game extends JPanel implements MouseListener {
 		Game game = new Game(new Board());
 		
 		
-		cont.add(game);
-	
-		frame.setLocationRelativeTo(null);
+		//JOptionPane configuration
+		JTextField name1 = new JTextField();
+		JTextField name2 = new JTextField();
+		Object[] players = { 
+				"Player1", name1,
+				"Player2", name2
+		};
+		Object [] options = {
+				"New Game"
+		};
+		int	button = JOptionPane.showOptionDialog(null, players, "CHESS", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		
-		frame.setBackground(Color.LIGHT_GRAY);
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		frame.setVisible(true);;
-		
-		Player player1, player2;
-		player1 = new Player("Player1", PieceColor.WHITE);
-		player2 = new Player("Player2", PieceColor.BLACK);
-		
-		game.setPlayer1(player1);
-		game.setPlayer2(player2);
-		
-		game.setCurrentPlayer(player1); 
+		//if condition to check button press
+		if (button == 0) {
+			cont.add(game);
+
+			frame.setLocationRelativeTo(null);
+
+			frame.setBackground(Color.LIGHT_GRAY);
+
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			frame.setVisible(true);;
+
+			Player player1, player2;
+			player1 = new Player(name1.getText(), PieceColor.WHITE);
+			player2 = new Player(name2.getText(), PieceColor.BLACK);
+
+			game.setPlayer1(player1);
+			game.setPlayer2(player2);
+
+			game.setCurrentPlayer(player1); 
+		}
 		
 	}
 }
