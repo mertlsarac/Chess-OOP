@@ -54,4 +54,8 @@ public abstract class Piece {
 		possibleMoves = new ArrayList<Point>();
 	}
 	
+	public void setPossibleMoves(ArrayList<Point> possibleMoves) {
+		this.possibleMoves = possibleMoves;
+	}
+	
 }
