@@ -163,7 +163,6 @@ public class Board {
 	
 	//if there is any enemy piece that threats the king
 	public boolean checkMateCondition(Piece king, Game game) {
-		game.setPossibleCheckMate(null);
 		for(Piece piece : pieces) {
 			if(piece.getColor() != king.getColor()) {
 				for(Point point : piece.getPossibleMoves(pieces)) {
@@ -243,8 +242,6 @@ public class Board {
 		
 		if(!flag)
 			return false;
-		
-		game.setPossibleCheckMate(king.getColor());
 		
 		return checkMateCondition4(king, possibleCheckMatePiece);
 	

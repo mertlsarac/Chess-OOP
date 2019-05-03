@@ -22,8 +22,6 @@ public class Game extends JPanel implements MouseListener {
 	private Board board;
 	Player player1, player2, currentPlayer;
 	
-	private PieceColor possibleCheckMate; 
-	
 	//does the game still continue ? if there is no winner yet, set this null.
 	private PieceColor isOver; 
 	
@@ -40,11 +38,6 @@ public class Game extends JPanel implements MouseListener {
 		this.board = board;
 		this.addMouseListener(this);
 		this.isOver = null;
-		this.possibleCheckMate = null; 
-	}
-	
-	public void setPossibleCheckMate(PieceColor possibleCheckMate) {
-		this.possibleCheckMate = possibleCheckMate;
 	}
 	
 	public void finishGame(PieceColor isOver) {
@@ -142,7 +135,6 @@ public class Game extends JPanel implements MouseListener {
 			
 			try {
 				//get the image path of the piece
-				System.out.println(current);
 				img = ImageIO.read(new File(current + "/" + piece.getImagePath()));
 			}
 			catch(IOException e) {
@@ -239,15 +231,6 @@ public class Game extends JPanel implements MouseListener {
 						}
 					}
 				}
-			}
-			
-			if(possibleCheckMate != null && possibleCheckMate.equals(currentPlayer.getColor())) {
-				if(possibleCheckMate.equals(PieceColor.WHITE))
-					selectedPiece = board.getWhiteKing();
-				else
-					selectedPiece = board.getBlackKing();
-				
-				flag = true;
 			}
 			
 			repaint();
