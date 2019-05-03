@@ -15,7 +15,7 @@ public class Board {
 	}
 	
 	public void createComponents() {
-		//PIECES
+		//CREATE PIECES
 		pieces = new ArrayList<Piece>();
 		
 		//Black rooks
@@ -79,7 +79,9 @@ public class Board {
 		return pieces;
 	}
 	
+	//
 	public boolean checkAndAddToPossibleMove(Point location, Piece selectedPiece) {
+		
 		Piece blockerPiece;
 		boolean flag = true;
 		
@@ -88,14 +90,17 @@ public class Board {
 				blockerPiece = piece;
 				//if the blocker piece is enemy
 				if(blockerPiece.getColor() != selectedPiece.getColor())
+					//add this frame to frame of selectedPiece
 					selectedPiece.addPossibleMove(location);
 				
+				//if there is a blocker piece
 				flag = false;
 			}
 		}
 	
 		//if there is no blocker
 		if(flag) {
+			//add this move to possibleMoves of selectedPiece
 			selectedPiece.addPossibleMove(location);
 			return true;
 		}
@@ -104,6 +109,14 @@ public class Board {
 	
 	public void removePiece(Piece piece) {
 		pieces.remove(piece);
+	}
+	
+	public Piece getWhiteKing() {
+		return whiteKing;
+	}
+	
+	public Piece getBlackKing() {
+		return blackKing;
 	}
 	
 	public void isThereAnotherPiece(Point point) {
@@ -120,87 +133,176 @@ public class Board {
 			removePiece(removedPiece);
 	}
 	
-	public PieceColor checkMate() {
+	public PieceColor checkMate(Game game) {
+		if(game.getCurrentPlayer().getColor() == PieceColor.WHITE) {
+			
+			if(checkMateCondition(blackKing, game)) {
+				return PieceColor.WHITE;	
+			}
 		
-		if(checkMateCondition(blackKing))
-			return PieceColor.WHITE;
+		}
 		
-		if(checkMateCondition(whiteKing))
-			return PieceColor.BLACK;
+		else {
+			if(checkMateCondition(whiteKing, game)) {
+				return PieceColor.BLACK;
+			}
+				
+		}
+			
 		
 		return null;
 	}
 	
 	//if there is any enemy piece that threats the king
-	public boolean checkMateCondition(Piece king) {
+	public boolean checkMateCondition(Piece king, Game game) {
+		System.out.println(king.getColor().toString());
+		game.setPossibleCheckMate(null);
 		for(Piece piece : pieces) {
 			if(piece.getColor() != king.getColor()) {
 				for(Point point : piece.getPossibleMoves(pieces)) {
 					if(point.x == king.getLocation().x && point.y == king.getLocation().y) {
 						System.out.println("Condition 1");
-						if(checkMateCondition2(king, piece) && checkMateCondition3(king, piece)) {
+						
+						if(checkMateCondition2(king, piece, game)) {
 							return true;
-
 						}
 					}
 				}
 
 			}
 		}
-		System.out.println("asd");
 		return false;
 	}
 	
+	//check if there is friendly piece which block possibleCheckMatePiece
+	public boolean checkMateCondition1(Piece king, Piece possibleCheckMatePiece) {
+		boolean flag = false;
+		for(Piece friendlyPiece : pieces) {
+			if(friendlyPiece.getColor() == king.getColor() && !friendlyPiece.equals(king)) {
+				for(Point point : friendlyPiece.getPossibleMoves(pieces)) {
+					Point previousFriendlyPieceLocation = friendlyPiece.getLocation();
+					
+					friendlyPiece.move(point);
+					System.out.println("friendlyPiece " + friendlyPiece.getLocation().x + " " + friendlyPiece.getLocation().y);
+					
+					boolean isThereFriendlyBlockerPiece = true;
+					for(Point enemyPossibleMoves : possibleCheckMatePiece.getPossibleMoves(pieces)) {
+						if(king.getLocation().x == enemyPossibleMoves.x && king.getLocation().y == enemyPossibleMoves.y) {
+							isThereFriendlyBlockerPiece = false;
+						}
+					}
+					friendlyPiece.move(previousFriendlyPieceLocation);
+					if(isThereFriendlyBlockerPiece)
+						flag = true;
+				}
+			}
+		}
+		System.out.println(flag);
+		return flag;
+	}
+	
+	//is there any free frame where the king can go ?
+	public boolean checkMateCondition2(Piece king, Piece possibleCheckMatePiece, Game game) {
+		System.out.println("condition2");
+		boolean flag = true; 
+		for(Piece piece : pieces) {
+			if(piece.getColor() != king.getColor()) {
+				for(Point kingMoves : king.getPossibleMoves(pieces)) {
+					if(!checkMateCondition5(king, kingMoves))
+						flag = false;
+				}
+			}
+		}
+		
+		if(!flag)
+			return false;
+		
+		return checkMateCondition3(king, possibleCheckMatePiece, game); 
+	}
+	
 	//if there is any friendly piece that can beat the enemy piece which threats except king
-	public boolean checkMateCondition2(Piece king, Piece possibleCheckMatePiece) {
-		System.out.println("Condition 2");
+	public boolean checkMateCondition3(Piece king, Piece possibleCheckMatePiece, Game game) {
+		System.out.println("Condition 3");
+		boolean flag = true;
 		for(Piece piece : pieces) {
 			if(piece.getColor() != possibleCheckMatePiece.getColor()) {
-				if(piece.getClass().getSimpleName().equals("Pawn")) {
-					Pawn pawn = (Pawn) piece;
-					pawn.getPawnThreats(pieces);
-					for(Point point : pawn.getPawnThreats(pieces)) {
-						if(point.x == possibleCheckMatePiece.getLocation().x && point.y == possibleCheckMatePiece.getLocation().y && !piece.equals(king)) {
-							return false;
-						}
-					}
-				}
-				else {
 					for(Point point : piece.getPossibleMoves(pieces)) {
 						if(point.x == possibleCheckMatePiece.getLocation().x && point.y == possibleCheckMatePiece.getLocation().y && !piece.equals(king)) {
-							return false;
+							flag = false; 
 						}
 					}
+			}
+		}
+		
+		boolean isThereBlockerPiece = checkMateCondition1(king, possibleCheckMatePiece);
+		
+		if(isThereBlockerPiece)
+			return false;
+		
+		if(!flag)
+			return false;
+		
+		game.setPossibleCheckMate(king.getColor());
+		
+		return checkMateCondition4(king, possibleCheckMatePiece);
+	
+	}
+	
+	//check that can king beat the enemy piece which threats 
+	public boolean checkMateCondition4(Piece king, Piece possibleCheckMatePiece) {
+		System.out.println("condition4");
+		
+		//if the king can't beat the enemy piece
+		boolean flag = true;
+		
+		for(Point point : king.getPossibleMoves(pieces)) {
+			
+			for(Piece piece : pieces) {
+				
+				//if the king can beat the enemy piece which threats
+				if(piece.getColor() != king.getColor() && piece.getLocation().x == point.x && piece.getLocation().y == point.y) {
+					
+					//if the king beat this enemy piece
+					flag = false;
+					
+					//if the king can beat the enemy piece which threats, check is there another enemy piece which has a possible move to this point
+					if(checkMateCondition5(king, piece.getLocation()))
+						flag = true; 
+						
 				}
 				
 			}
 		}
-		return true;
+		return flag;
 	}
 	
-	//if there is no friendly piece, check that can king beat the enemy piece which threats 
-	public boolean checkMateCondition3(Piece king, Piece possibleCheckMatePiece) {
-		Point previousKingLocation = king.getLocation();
-		for(Point point : king.getPossibleMoves(pieces)) {
-			for(Piece piece : pieces) {
-				if(piece.getColor() != king.getColor() && piece.getLocation().x == point.x && piece.getLocation().y == point.y) {
-					//keep the king's previous location
-					
-					//move the king the location in order to check any threats coming from this location
-					king.move(piece.getLocation());
-					
-					for(Piece piece2 : pieces) {
-						for(Point point2 : piece2.getPossibleMoves(pieces)) {
-							if(king.getLocation().x == point2.x && king.getLocation().y == point2.y) {
-								king.move(previousKingLocation);
-								return true; 
-							}
-						}
+	//check is there another enemy when the king beat the piece which threats
+	public boolean checkMateCondition5(Piece king, Point newKingLocation) {
+		System.out.println("condition5");
+		
+		//keep previous location of the king
+		Point previousKingPoint = king.getLocation();
+		
+		//pretend that the king move to the enemy piece
+		king.move(newKingLocation);
+		
+		//check again if there is another enemy piece which can go to this frame
+		for(Piece piece : pieces) {
+			if(piece.getColor() != king.getColor()) {
+				for(Point point : piece.getPossibleMoves(pieces)) {
+					if(king.getLocation().x == point.x && king.getLocation().y == point.y) {
+						
+						//get the king to the his previous location
+						king.move(previousKingPoint);
+						
+						//it is check-mate condition, return true
+						return true;
 					}
+						
 				}
 			}
 		}
-		king.move(previousKingLocation);
+		king.move(previousKingPoint);
 		return false;
 	}
 }
