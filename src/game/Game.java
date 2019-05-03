@@ -47,6 +47,11 @@ public class Game extends JPanel implements MouseListener {
 		this.possibleCheckMate = possibleCheckMate;
 	}
 	
+	public void finishGame(PieceColor isOver) {
+		this.isOver = isOver;
+		endGame(isOver);
+	}
+	
 	public void paint(Graphics g) {
 		//fill the all board
 		g.setColor(Color.GRAY);
@@ -88,7 +93,6 @@ public class Game extends JPanel implements MouseListener {
 			int x, y;
 			
 			if(selectedPiece.getClass().getSimpleName().equals("King")) {
-				System.out.println("king");
 				ArrayList<Point> kingPossibleMoves = new ArrayList<Point>(); 
 				for(Point kingMoves : selectedPiece.getPossibleMoves(board.getPieces())) {
 					boolean flag = true;
@@ -190,7 +194,7 @@ public class Game extends JPanel implements MouseListener {
 					//check if the click is on the frame of possible moves
 					if(ex < x && ex > (x - Game.n) && ey < y && ey > (y - Game.n)) {
 						//check if there is an enemy piece at the moving point.
-						board.isThereAnotherPiece(new Point(cell.x, cell.y));
+						board.isThereAnotherPiece(new Point(cell.x, cell.y), this);
 						
 						//move the selected piece on the chosen frame
 						selectedPiece.move(new Point(cell.x, cell.y)); 
@@ -202,10 +206,13 @@ public class Game extends JPanel implements MouseListener {
 						flag = true;
 						
 						//check for check-mate
-						isOver = board.checkMate(this);
-						if(isOver != null) {
-							repaint();
-							endGame(isOver);
+						if(isOver == null) {
+							isOver = board.checkMate(this);
+							if(isOver != null) {
+								repaint();
+								endGame(isOver);
+							}
+							
 						}
 						
 						switchPlayer();
@@ -234,7 +241,6 @@ public class Game extends JPanel implements MouseListener {
 			}
 			
 			if(possibleCheckMate != null && possibleCheckMate.equals(currentPlayer.getColor())) {
-				System.out.println("possibleCheckmate");
 				if(possibleCheckMate.equals(PieceColor.WHITE))
 					selectedPiece = board.getWhiteKing();
 				else

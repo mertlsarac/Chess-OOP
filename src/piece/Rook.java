@@ -33,6 +33,7 @@ public class Rook extends Piece {
 		tempLocation = getLocation();
 		//reset the flag
 		boolean flag = true;
+		//(x++, y)
 		while(tempLocation.x < 8 && flag) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -43,6 +44,7 @@ public class Rook extends Piece {
 		tempLocation = super.getLocation();
 		//reset the flag
 		flag = true;
+		//(x, y++) 
 		while(tempLocation.y < 8 && flag) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y + 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -52,6 +54,7 @@ public class Rook extends Piece {
 		tempLocation = super.getLocation();
 		//reset the flag
 		flag = true;
+		//(x--, y)
 		while(tempLocation.x > 1 && flag) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -62,6 +65,7 @@ public class Rook extends Piece {
 		tempLocation = super.getLocation();
 		//reset the flag
 		flag = true;
+		//(x, y--)
 		while(tempLocation.y > 1 && flag) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y - 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);

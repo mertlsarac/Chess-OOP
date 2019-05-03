@@ -34,6 +34,8 @@ public class Queen extends Piece {
 		
 		Point tempLocation = super.getLocation();
 		
+		//add bishop and rook possibleMoves algorithms
+		
 		while(tempLocation.x > 1 && tempLocation.y > 1 && flag) {
 			tempLocation= new Point(tempLocation.x - 1, tempLocation.y - 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);

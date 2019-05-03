@@ -32,6 +32,7 @@ public class Bishop extends Piece {
 		Point tempLocation = getLocation();
 		
 		boolean flag = true;
+		//(x--, y--)
 		while(tempLocation.x > 1 && tempLocation.y > 1 && flag) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y - 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -41,6 +42,7 @@ public class Bishop extends Piece {
 		tempLocation = getLocation();
 		//reset the flag
 		flag = true;
+		//(x++, y++)
 		while(tempLocation.x < 8 && tempLocation.y < 8 && flag) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y + 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -50,7 +52,7 @@ public class Bishop extends Piece {
 		tempLocation = super.getLocation();
 		//reset the flag
 		flag = true;
-		
+		//(x++, y--)
 		while(tempLocation.x < 8 && tempLocation.y > 1 && flag) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y - 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -60,7 +62,7 @@ public class Bishop extends Piece {
 		tempLocation = super.getLocation();
 		//reset the flag
 		flag = true;
-		
+		//(x--, y++)
 		while(tempLocation.x > 1 && tempLocation.y < 8 && flag) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y + 1);
 			flag = getBoard().checkAndAddToPossibleMove(tempLocation, this);

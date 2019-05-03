@@ -27,13 +27,11 @@ public class King extends Piece {
 		Point tempLocation = getLocation();
 		resetPossibleMoves();
 		ArrayList<Point> possibleMoves = getPossibleMoves();
-		 
-		@SuppressWarnings("unchecked")
-		ArrayList<Piece> piecesExceptThis = (ArrayList<Piece>) pieces.clone();
-		piecesExceptThis.remove(this);
 		
 		//reset tempLocation
 		tempLocation = getLocation();
+		
+		//(x + 1, y + 1)
 		if(tempLocation.x + 1 <= 8 && tempLocation.y + 1 <= 8) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y + 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);			
@@ -42,6 +40,7 @@ public class King extends Piece {
 
 		//reset tempLocation
 		tempLocation = getLocation();
+		//(x + 1, y)
 		if(tempLocation.x + 1 <= 8) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -50,6 +49,7 @@ public class King extends Piece {
 		//reset tempLocation
 		tempLocation = getLocation();
 		if(tempLocation.x + 1 <= 8 && tempLocation.y - 1 >= 1) {
+			//(x + 1, y - 1) 
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y - 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);			
 		}
@@ -57,12 +57,14 @@ public class King extends Piece {
 		//reset tempLocation
 		tempLocation = getLocation();
 		if(tempLocation.x - 1 >= 1 && tempLocation.y + 1 <= 8) {
+			//(x - 1, y + 1) 
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y + 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
 		}
 
 		//reset tempLocation
 		tempLocation = getLocation();
+		//(x - 1, y) 
 		if(tempLocation.x - 1 >= 1) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -70,6 +72,7 @@ public class King extends Piece {
 
 		//reset tempLocation
 		tempLocation = getLocation();
+		//(x - 1, y - 1) 
 		if(tempLocation.x - 1 >= 1 && tempLocation.y - 1 >= 1) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y - 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -77,6 +80,7 @@ public class King extends Piece {
 
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x, y + 1)
 		if(tempLocation.y + 1 <= 8) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y + 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -84,6 +88,7 @@ public class King extends Piece {
 
 		 //reset tempLocation
 		tempLocation = super.getLocation();
+		//(x, y - 1) 
 		if(tempLocation.y - 1 >= 1) {
 			tempLocation = new Point(tempLocation.x, tempLocation.y - 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);

@@ -28,6 +28,7 @@ public class Knight extends Piece {
 		resetPossibleMoves();
 		ArrayList<Point> possibleMoves = getPossibleMoves();
 		
+		//(x + 1, y + 2)
 		if(tempLocation.x + 1 <= 8 && tempLocation.y + 2 <= 8) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y + 2);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -35,6 +36,7 @@ public class Knight extends Piece {
 		
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x + 1, y - 2)
 		if(tempLocation.x + 1 <= 8 && tempLocation.y - 2 >= 1) {
 			tempLocation = new Point(tempLocation.x + 1, tempLocation.y - 2);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -42,6 +44,7 @@ public class Knight extends Piece {
 
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x - 1, y - 2) 
 		if(tempLocation.x - 1 >= 1 && tempLocation.y + 2 <= 8) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y + 2);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -50,6 +53,7 @@ public class Knight extends Piece {
 		
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x - 1, y - 2) 
 		if(tempLocation.x - 1 >= 1 && tempLocation.y - 2 >= 1) {
 			tempLocation = new Point(tempLocation.x - 1, tempLocation.y - 2);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -58,6 +62,7 @@ public class Knight extends Piece {
 
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x + 2, y + 1)
 		if(tempLocation.x + 2 <= 8 && tempLocation.y + 1 <= 8) {
 			tempLocation = new Point(tempLocation.x + 2, tempLocation.y + 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);			
@@ -66,6 +71,7 @@ public class Knight extends Piece {
 		
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x + 2, y - 1) 
 		if(tempLocation.x + 2 <= 8 && tempLocation.y - 1 >= 1) {
 			tempLocation = new Point(tempLocation.x + 2, tempLocation.y - 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);
@@ -74,6 +80,7 @@ public class Knight extends Piece {
 		
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x - 2, y + 1)
 		if(tempLocation.x - 2 >= 1 && tempLocation.y + 1 <= 8) {
 			tempLocation = new Point(tempLocation.x - 2, tempLocation.y + 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);			
@@ -82,6 +89,7 @@ public class Knight extends Piece {
 		
 		//reset tempLocation
 		tempLocation = super.getLocation();
+		//(x - 2, y - 1) 
 		if(tempLocation.x - 2 >= 1 && tempLocation.y - 1 <= 8) {
 			tempLocation = new Point(tempLocation.x - 2, tempLocation.y - 1);
 			getBoard().checkAndAddToPossibleMove(tempLocation, this);			

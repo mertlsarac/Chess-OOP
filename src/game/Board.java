@@ -119,7 +119,7 @@ public class Board {
 		return blackKing;
 	}
 	
-	public void isThereAnotherPiece(Point point) {
+	public void isThereAnotherPiece(Point point, Game game) {
 		int x, y;
 		Piece removedPiece = null;
 		for(Piece piece : getPieces()) {
@@ -129,8 +129,16 @@ public class Board {
 				removedPiece = piece;
 			}
 		}
-		if(removedPiece != null)
+		if(removedPiece != null) {
 			removePiece(removedPiece);
+			
+			//if removedPiece is one of the kings, xforce the game over
+			if(removedPiece.equals(whiteKing)) 
+				game.finishGame(PieceColor.BLACK);
+			
+			else if(removedPiece.equals(blackKing))
+				game.finishGame(PieceColor.WHITE);
+		}
 	}
 	
 	public PieceColor checkMate(Game game) {
@@ -155,13 +163,11 @@ public class Board {
 	
 	//if there is any enemy piece that threats the king
 	public boolean checkMateCondition(Piece king, Game game) {
-		System.out.println(king.getColor().toString());
 		game.setPossibleCheckMate(null);
 		for(Piece piece : pieces) {
 			if(piece.getColor() != king.getColor()) {
 				for(Point point : piece.getPossibleMoves(pieces)) {
 					if(point.x == king.getLocation().x && point.y == king.getLocation().y) {
-						System.out.println("Condition 1");
 						
 						if(checkMateCondition2(king, piece, game)) {
 							return true;
@@ -183,7 +189,6 @@ public class Board {
 					Point previousFriendlyPieceLocation = friendlyPiece.getLocation();
 					
 					friendlyPiece.move(point);
-					System.out.println("friendlyPiece " + friendlyPiece.getLocation().x + " " + friendlyPiece.getLocation().y);
 					
 					boolean isThereFriendlyBlockerPiece = true;
 					for(Point enemyPossibleMoves : possibleCheckMatePiece.getPossibleMoves(pieces)) {
@@ -197,13 +202,11 @@ public class Board {
 				}
 			}
 		}
-		System.out.println(flag);
 		return flag;
 	}
 	
 	//is there any free frame where the king can go ?
 	public boolean checkMateCondition2(Piece king, Piece possibleCheckMatePiece, Game game) {
-		System.out.println("condition2");
 		boolean flag = true; 
 		for(Piece piece : pieces) {
 			if(piece.getColor() != king.getColor()) {
@@ -222,7 +225,6 @@ public class Board {
 	
 	//if there is any friendly piece that can beat the enemy piece which threats except king
 	public boolean checkMateCondition3(Piece king, Piece possibleCheckMatePiece, Game game) {
-		System.out.println("Condition 3");
 		boolean flag = true;
 		for(Piece piece : pieces) {
 			if(piece.getColor() != possibleCheckMatePiece.getColor()) {
@@ -250,7 +252,6 @@ public class Board {
 	
 	//check that can king beat the enemy piece which threats 
 	public boolean checkMateCondition4(Piece king, Piece possibleCheckMatePiece) {
-		System.out.println("condition4");
 		
 		//if the king can't beat the enemy piece
 		boolean flag = true;
@@ -278,7 +279,6 @@ public class Board {
 	
 	//check is there another enemy when the king beat the piece which threats
 	public boolean checkMateCondition5(Piece king, Point newKingLocation) {
-		System.out.println("condition5");
 		
 		//keep previous location of the king
 		Point previousKingPoint = king.getLocation();

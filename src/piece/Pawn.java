@@ -22,6 +22,7 @@ public class Pawn extends Piece {
 		return imagePath;
 	}
 	
+	//if there is a piece in the cross, return false
 	public boolean pawnSpecialCondition(ArrayList<Piece> pieces, Point location) {
 		for(Piece piece : pieces) {
 			if(piece.getLocation().x == location.x && piece.getLocation().y == location.y) {
@@ -45,13 +46,14 @@ public class Pawn extends Piece {
 				getBoard().checkAndAddToPossibleMove(tempLocation, this);
 			
 			tempLocation = getLocation();
+			//if this white pawn on the second row, add (x, y + 2) to the list
 			if(getLocation().y == 2) {
 				tempLocation = new Point(tempLocation.x, tempLocation.y + 2);
 				if(pawnSpecialCondition(pieces, tempLocation) && pawnSpecialCondition(pieces, new Point(tempLocation.x, tempLocation.y - 1)))
 					getBoard().checkAndAddToPossibleMove(tempLocation, this);
 			}
 			
-			
+			//if there is a piece of enemy in the cross, add that point to the list
 			for(Piece piece : getBoard().getPieces()) {
 				tempLocation = getLocation();
 				if(tempLocation.x - 1 == piece.getLocation().x && tempLocation.y + 1 == piece.getLocation().y && piece.getColor() != getColor()) {
