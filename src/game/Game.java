@@ -142,7 +142,8 @@ public class Game extends JPanel implements MouseListener {
 			
 			try {
 				//get the image path of the piece
-				img = ImageIO.read(new File(current + "/src/game/" + piece.getImagePath()));
+				System.out.println(current);
+				img = ImageIO.read(new File(current + "/" + piece.getImagePath()));
 			}
 			catch(IOException e) {
 				e.printStackTrace();
