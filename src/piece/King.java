@@ -28,6 +28,10 @@ public class King extends Piece {
 		resetPossibleMoves();
 		ArrayList<Point> possibleMoves = getPossibleMoves();
 		 
+		@SuppressWarnings("unchecked")
+		ArrayList<Piece> piecesExceptThis = (ArrayList<Piece>) pieces.clone();
+		piecesExceptThis.remove(this);
+		
 		//reset tempLocation
 		tempLocation = getLocation();
 		if(tempLocation.x + 1 <= 8 && tempLocation.y + 1 <= 8) {
